@@ -33,8 +33,8 @@ Route::get('/product',[AdminController::class,'product']);
 Route::post('/uploadproduct',[AdminController::class,'uploadproduct']);
 Route::get('/showproduct',[AdminController::class,'showproduct']);
 Route::get('/testlogin',[AdminController::class,'testlogin']);
-Route::get('video-upload', [ VideoController::class, 'getVideoUploadForm' ])->name('get.video.upload');
-Route::post('video-upload', [ VideoController::class, 'uploadVideo' ])->name('store.video');
+//Route::get('video-upload', [ VideoController::class, 'getVideoUploadForm' ])->name('get.video.upload');
+//Route::post('video-upload', [ VideoController::class, 'uploadVideo' ])->name('store.video');
 
 
 

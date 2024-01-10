@@ -29,7 +29,7 @@ class HomeController extends Controller
     if(Auth::id()){
       return redirect('redirect') ;
     }
-    else{$data=product::paginate(4);
+    else{$data=product::paginate(6);
     return view('user.home',compact('data'));}
    }
    
