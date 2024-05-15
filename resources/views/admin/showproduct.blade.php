@@ -9,7 +9,15 @@
       @include('admin.navbar')-->
         <!-- partial -->
      <div class="container-fluid page-body-wrapper">
+
         <div class="container" align="center">
+             
+        @if(session()->has('message'))
+        <div class="alert-success">
+        <button type="button" class="close" data-dismiss="alert">x</button>
+        {{ session()->get('message') }}
+      </div>
+      @endif
             <table>
                 <tr>
                     <td style="padding:20px">title</td>
@@ -17,6 +25,13 @@
                     <td style="padding:20px">quantity</td>
                     <td style="padding:20px">price</td>
                     <td style="padding:20px">img</td>
+                    <td style="padding:20px">update</td>
+                    <td style="padding:20px">delete</td>
+
+
+
+                   
+
                 </tr>
                 @foreach ($data = $data->reverse() as $products)
                     
@@ -28,6 +43,10 @@
                     <td style="padding:20px">{{  $products->quantity}}</td>
                     <td style="padding:20px"><img src="productimage/{{  $products->image}}" 
                         height="100px" width="100px"> </td>
+                        <td style="padding:20px"><a class="btn btn-primary" href="{{  url('updateimagehomepage',$products->id) }}">Update</td>
+                          <td style="padding:20px"><a class="btn btn-danger" href="{{ url('deleteproduct',$products->id) }}">Delete</td>
+
+
                 </tr>
                 @endforeach
             </table>

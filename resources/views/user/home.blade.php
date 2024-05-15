@@ -7,12 +7,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/solid.css" integrity="sha384-Tv5i09RULyHKMwX0E8wJUqSOaXlyu3SQxORObAI08iUwIalMmN5L6AvlPX2LMoSE" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/fontawesome.css" integrity="sha384-jLKHWM3JRmfMU0A5x5AkjWkw/EYfGUAGagvnfryNV3F9VqM98XiIH7VBGVoxVSc7" crossorigin="anonymous"/>
+    
+
+    <style>
+      /* Hide the button by default */
+.add-to-cart-btn {
+    display: none;
+}
+
+/* Show the button when hovering over the product image */
+.product-item:hover .add-to-cart-btn {
+    display: block;
+    
+}
+/* Hide the default arrows */
+.quantity-input::-webkit-inner-spin-button,
+.quantity-input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Styling for the "+" and "-" buttons */
+.quantity-input {
+    appearance: textfield;
+    -moz-appearance: textfield;
+    width: 70px;
+    text-align: center;
+}
+
+/* Styling for the "+" and "-" buttons */
+.quantity-input:focus {
+    outline: none;
+    border: none;
+}
+
+
+    </style>
+
 
     <title>Mimoza Peinture </title>
 
     <!-- Bootstrap core CSS -->
     <link href="{{ asset('vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('assets/css/fontawesome.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/templatemo-sixteen.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/owl.css') }}">
+
 <!--
 
 TemplateMo 546 Sixteen Clothing
@@ -25,6 +69,7 @@ https://templatemo.com/tm-546-sixteen-clothing
     <link rel="stylesheet" href="{{ asset('assets/css/fontawesome.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/templatemo-sixteen.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/owl.css') }}">
+   
 
   </head>
 
@@ -40,53 +85,7 @@ https://templatemo.com/tm-546-sixteen-clothing
     </div>  
     <!-- ***** Preloader End ***** -->
 
-    <!-- Header -->
-    <header class="">
-      <nav class="navbar navbar-expand-lg">
-        <div class="container">
-          <a class="navbar-brand" href="{{ url('testlogin') }}"><h2>Artizano <em> Pro</em></h2></a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ml-auto">
-              <li class="nav-item active">
-                <a class="nav-link" href="index.html">Home
-                  <span class="sr-only">(current)</span>
-                </a>
-              </li> 
-              <li class="nav-item">
-                <a class="nav-link" href="products.html">Our Products</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="about.html">About Us</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="contact.html">Contact Us</a>
-              </li>
-              <li>
-              @if (Route::has('login'))
-              
-                  @auth
-                     <x-app-layout>
-    
-                     </x-app-layout>
-                  @else
-                     <li class="nav-item"> <a class="nav-link"  href="{{ route('login') }}" >Log in</a></li>
-
-                      @if (Route::has('register'))
-                        <li class="nav-item">  <a class="nav-link" href="{{ route('register') }}" >Register</a></li>
-                      @endif
-                  @endauth
-              
-          @endif
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
-    </header>
-
+   @include('user.header')
     <!-- Page Content -->
     <!-- Banner Starts Here -->
     <div class="banner header-text">
@@ -113,6 +112,7 @@ https://templatemo.com/tm-546-sixteen-clothing
     </div>
     <!-- Banner Ends Here -->
 @include('user.product')
+
    
 
     <div class="best-features">
@@ -132,6 +132,11 @@ https://templatemo.com/tm-546-sixteen-clothing
                 <li><a href="#">Peinture Carrosseriet</a></li>
                 <li><a href="#">Peinture décorative</a></li>
                 <li><a href="#">Peinture industrielle</a></li>
+                <li><!-- In your signup view -->
+                  <a href="{{ route('google.login') }}" class="btn btn-google">Sign up with Google</a></li>
+                <li><!-- navbar.blade.php -->
+                  <a href="{{ route('viewCart') }}" class="btn btn-success">View Cart</a></li>
+                    
                 
               </ul>
               <a href="about.html" class="filled-button">Read More</a>
@@ -182,30 +187,100 @@ https://templatemo.com/tm-546-sixteen-clothing
 
 
     <!-- Bootstrap core JavaScript -->
-    <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
-    <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+    // Add event listeners for each product's quantity input and buttons
+    document.querySelectorAll('.product-item').forEach(function(product) {
+        const quantityInput = product.querySelector('.quantity-input');
+        const minusBtn = product.querySelector('.minus-btn');
+        const plusBtn = product.querySelector('.plus-btn');
+        
+        // Decrement quantity
+        minusBtn.addEventListener('click', function() {
+            if (parseInt(quantityInput.value) > 1) {
+                quantityInput.value = parseInt(quantityInput.value) - 1;
+            }
+        });
+        
+        // Increment quantity
+        plusBtn.addEventListener('click', function() {
+            quantityInput.value = parseInt(quantityInput.value) + 1;
+        });
+        
+        // Add click event listener to each product image
+        product.querySelector('img').addEventListener('click', function() {
+            // Toggle visibility of the add-to-cart form
+            var addForm = product.querySelector('.add-to-cart-form');
+            // Hide all forms
+            document.querySelectorAll('.add-to-cart-form').forEach(function(form) {
+                form.style.display = 'none';
+            });
+            // Show the form of the clicked product
+            addForm.style.display = 'block';
+        });
+    });
+});
 
+  </script>
+  <script >
+    document.addEventListener('DOMContentLoaded', function() {
+    // Add event listeners for each product's quantity input and buttons
+    document.querySelectorAll('.product-item').forEach(function(product) {
+        const quantityInput = product.querySelector('.quantity-input');
+        const minusBtn = product.querySelector('.minus-btn');
+        const plusBtn = product.querySelector('.plus-btn');
 
-    <!-- Additional Scripts -->
-    <script src="{{asset('assets/js/custom.js') }}"></script>
-    <script src="{{asset('assets/js/owl.js')  }}"></script>
-    <script src="{{ asset('assets/js/slick.js') }}"></script>
-    <script src="{{ asset('assets/js/isotope.js') }}"></script>
-    <script src="{{ asset('assets/js/accordions.js') }}"></script>
+        // Function to update total price
+        function updateTotalPrice() {
+            let totalPrice = 0;
+            document.querySelectorAll('.product-item').forEach(function(product) {
+                const price = parseFloat(product.querySelector('.product-price').textContent.replace('$', ''));
+                const quantity = parseInt(product.querySelector('.quantity-input').value);
+                totalPrice += price * quantity;
+            });
+            document.getElementById('total-price').textContent = 'Total Price: $' + totalPrice.toFixed(2);
+        }
 
+        // Decrement quantity
+        minusBtn.addEventListener('click', function() {
+            if (parseInt(quantityInput.value) > 1) {
+                quantityInput.value = parseInt(quantityInput.value) - 1;
+                updateTotalPrice();
+            }
+        });
 
-    <script language = "text/Javascript"> 
-      cleared[0] = cleared[1] = cleared[2] = 0; //set a cleared flag for each field
-      function clearField(t){                   //declaring the array outside of the
-      if(! cleared[t.id]){                      // function makes it static and global
-          cleared[t.id] = 1;  // you could use true and false, but that's more typing
-          t.value='';         // with more chance of typos
-          t.style.color='#fff';
-          }
-      }
+        // Increment quantity
+        plusBtn.addEventListener('click', function() {
+            quantityInput.value = parseInt(quantityInput.value) + 1;
+            updateTotalPrice();
+        });
+
+        // Add click event listener to each product image
+        product.querySelector('img').addEventListener('click', function() {
+            // Toggle visibility of the add-to-cart form
+            var addForm = product.querySelector('.add-to-cart-form');
+            // Hide all forms
+            document.querySelectorAll('.add-to-cart-form').forEach(function(form) {
+                form.style.display = 'none';
+            });
+            // Show the form of the clicked product
+            addForm.style.display = 'block';
+        });
+
+        // Update total price initially
+        updateTotalPrice();
+    });
+});
+
+console.log('Price:', price)
+            console.log('Quantity:', quantity)
     </script>
+      
+   
+  
+    @include('user.scripts')
 
-
+    
   </body>
 
 </html>

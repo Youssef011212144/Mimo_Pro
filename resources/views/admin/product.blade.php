@@ -5,6 +5,7 @@
    <style type="text/css">
    .toto{
     color:black
+    font-color:black
    }
 .title{
     

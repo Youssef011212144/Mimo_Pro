@@ -59,12 +59,15 @@
           <span class="nav-link">Navigation</span>
         </li>
         <li class="nav-item menu-items">
-          <a class="nav-link" href="index.html">
-            <span class="menu-icon">
-              <i class="mdi mdi-speedometer"></i>
-            </span>
-            <span class="menu-title">DASHBOARD</span>
-          </a>
+          <a class="nav-link" href="{{ route('logout') }}"
+            
+            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            Logout
+        </a>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+          @csrf
+      </form>
+            
         </li>
        
         
@@ -76,6 +79,7 @@
             <span class="menu-title">ADD NEW PRODUCT</span>
           </a>
         </li>
+        
         <li class="nav-item menu-items">
           <a class="nav-link" href="{{url('showproduct')}}">
             <span class="menu-icon">
@@ -85,11 +89,19 @@
           </a>
         </li>
         <li class="nav-item menu-items">
-          <a class="nav-link" href="{{url('showproduct')}}">
+          <a class="nav-link" href="{{route('showorders')}}">
             <span class="menu-icon">
               <i class="mdi mdi-file-document-box"></i>
             </span>
-            <span class="menu-title">SHOW ALL PRODUCTS</span>
+            <span class="menu-title">Orders</span>
+          </a>
+        </li>
+        <li class="nav-item menu-items">
+          <a class="nav-link" href="{{url('showvideo')}}">
+            <span class="menu-icon">
+              <i class="mdi mdi-file-document-box"></i>
+            </span>
+            <span class="menu-title">ADD VIDEO</span>
           </a>
         </li>
 

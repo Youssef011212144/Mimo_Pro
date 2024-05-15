@@ -1,4 +1,4 @@
-<nav x-data="{ open: false }" >
+{{--<nav x-data="{ open: false }" >
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -7,6 +7,7 @@
                 
 
                 <!-- Navigation Links -->
+            </div>
                 
 
             <div class="hidden sm:flex sm:items-center sm:ml-6">
@@ -203,4 +204,4 @@
             </div>
         </div>
     </div>
-</nav>
+</nav>--}}
